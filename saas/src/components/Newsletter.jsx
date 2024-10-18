@@ -2,8 +2,12 @@ import { CalendarDaysIcon, HandRaisedIcon } from '@heroicons/react/24/outline'
 import { Button } from '../Actions/Action'
 import { useDispatch, useSelector } from 'react-redux'
 import  axios  from 'axios'
+import { RxCross2 } from "react-icons/rx";
 import { useEffect, useState } from 'react'
 export default function Newsletter() {
+    const dispatch = useDispatch()
+    const state = useSelector(state => state.button)
+    console.log(state);
     const [email, setemail] = useState("")
     useEffect(()=>{
         axios.get("http://localhost:5000/")
@@ -11,7 +15,8 @@ export default function Newsletter() {
             console.log(res.data);
         })
     })
-    const handleInput = () => {
+    const handleInput = (e) => {
+        e.preventDefault()
         if(email){
             axios.post('http://localhost:5000/user', { email: email })
             .then((res)=>{
@@ -20,13 +25,11 @@ export default function Newsletter() {
             .catch(err=>{
                 console.log(err);
             })
-            dispatch(Button(console.log("false is working well")))
         }
+        dispatch(Button(console.log("false is working well")))
     }
-    const dispatch = useDispatch()
-    const state = useSelector(state => state.button)
-    // console.log(state);
-    return (
+    
+    return(
         <div>
         <div className="relative isolate overflow-hidden bg-gray-900 py-16 sm:py-24 lg:py-32">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -95,8 +98,10 @@ export default function Newsletter() {
 
         {/* Modal */}
 
-        <div className={state ? "flex" : "hidden"}>
-            <div className='fixed bottom-0 left-[50%] w-[300px] h-20 bg-sky-400 rounded-lg'></div>
+        <div className={state.button ? "flex" : "hidden"}>
+            <div className='fixed bottom-0 left-[50%] w-[300px] h-20 bg-sky-400 rounded-lg'>
+            <RxCross2 size={20} color='black' onClick={() => dispatch({ type: 'BUTTON' })}/>
+            </div>
 
         </div>
 
